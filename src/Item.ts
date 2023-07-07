@@ -3,6 +3,13 @@ import { B } from "./B";
 import { C } from "./C";
 import { D } from "./D";
 
+export enum itemType {
+  A = "A",
+  B = "B",
+  C = "C",
+  D = "D",
+}
+
 export interface Item {
   getPrice(): number;
 }

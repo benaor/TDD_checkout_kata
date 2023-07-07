@@ -1,15 +1,24 @@
+import { Discount } from "./Discount";
 import { itemFactory } from "./Item";
 
-export const checkout = (itemsList: string): number => {
-  const reduction = itemsList
-    .split("")
-    .reduce((acc, itemChar) => acc + itemFactory(itemChar).getPrice(), 0);
+export class Store {
+  constructor(private discountList: Discount[]) {}
 
-  const A_counter = itemsList.split("").filter((item) => item === "A").length;
-  const B_counter = itemsList.split("").filter((item) => item === "B").length;
+  public checkout(itemsList: string): number {
+    const total = this.calculateTotal(itemsList);
+    const totalDiscount = this.calculateTotalDiscount(itemsList);
 
-  const total =
-    reduction - Math.trunc(A_counter / 3) * 20 - Math.trunc(B_counter / 3) * 15;
+    return total - totalDiscount;
+  }
 
-  return total;
-};
+  private calculateTotal = (itemsList: string): number =>
+    itemsList
+      .split("")
+      .reduce((acc, itemChar) => acc + itemFactory(itemChar).getPrice(), 0);
+
+  private calculateTotalDiscount = (itemsList: string): number =>
+    this.discountList.reduce(
+      (acc, discount) => acc + discount.calculateDiscount(itemsList),
+      0
+    );
+}
